@@ -12,12 +12,19 @@ cd lib
 make
 ```
 
-3. Build the module:
+3. Instalar cython:
+```
+conda create -n cython python=3.8 -y
+conda activate cython
+pip install cython
+```
+
+4. Build the module:
 ```
 make
 ```
 
-4. Probar:
+5. Probar:
 ```
 python main.py
 ```
