@@ -16,11 +16,13 @@ class Person:
 
     def bite(self, lock):
         # acquire the lock
+        #lock.acquire()
         with lock:
             while self.cake.getQuantity() > 0:
                 print(f"==\n{self.name} muerde al pastel en {self.cake.getQuantity()}")
                 self.cake.biteMe()
                 print(f"{self.name} deja al pastel con {self.cake.getQuantity()}")
+        #lock.release()
 
     def __str__(self):
         return self.name
