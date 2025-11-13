@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  api:
+    image: python:3.12-slim
+    container_name: flask-redis-api
+    working_dir: /app
+    volumes:
+      - ./main.py:/app/main.py
+    command: sh -c "pip install flask redis && python main.py"
+    ports:
+      - "5001:5001"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+
