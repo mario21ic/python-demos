@@ -49,9 +49,9 @@ func main() {
 	}
 
 	r := chi.NewRouter()
-	r.Get("/health", healthHandler)
-	r.Post("/orders", createOrderHandler)
-	r.Get("/orders/{id}", getOrderHandler)
+	r.Get("/api/orders/health", healthHandler)
+	r.Post("/api/orders", createOrderHandler)
+	r.Get("/api/orders/{id}", getOrderHandler)
 
 	addr := ":5003"
 	log.Printf("order-service running on %s", addr)

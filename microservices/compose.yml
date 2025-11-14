@@ -41,6 +41,8 @@ services:
         condition: service_healthy
     ports:
       - "5001:5001"
+    volumes:
+      - ./user_service/app.py:/app/app.py
 
   product-service:
     build:
@@ -53,6 +55,8 @@ services:
         condition: service_healthy
     ports:
       - "5002:5002"
+    volumes:
+      - ./product_service/server.js:/app/server.js
 
   order-service:
     build:
@@ -71,4 +75,6 @@ services:
         condition: service_healthy
     ports:
       - "5003:5003"
+    #volumes:
+    #  - ./order_service/main.go:/app/main
 

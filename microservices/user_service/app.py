@@ -9,12 +9,12 @@ REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
 r = redis.from_url(REDIS_URL)
 
 
-@app.get("/health")
+@app.get("/api/users/health")
 def health():
     return {"status": "ok", "service": "user-service"}, 200
 
 
-@app.post("/users")
+@app.post("/api/users")
 def create_user():
     data = request.get_json() or {}
     user_id = str(data.get("id", "")).strip()
@@ -29,7 +29,7 @@ def create_user():
     return {"message": "user created", "id": user_id, "name": name}, 201
 
 
-@app.get("/users/<user_id>")
+@app.get("/api/users/<user_id>")
 def get_user(user_id):
     key = f"user:{user_id}"
     raw = r.get(key)

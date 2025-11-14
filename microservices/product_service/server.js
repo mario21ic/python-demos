@@ -15,11 +15,11 @@ redisClient.on("error", (err) => {
   await redisClient.connect();
 })();
 
-app.get("/health", (req, res) => {
+app.get("/api/products/health", (req, res) => {
   res.json({ status: "ok", service: "product-service" });
 });
 
-app.post("/products", async (req, res) => {
+app.post("/api/products", async (req, res) => {
   const { id, name, price } = req.body;
 
   if (!id || !name) {
@@ -36,7 +36,7 @@ app.post("/products", async (req, res) => {
   res.status(201).json({ message: "product created", product });
 });
 
-app.get("/products/:id", async (req, res) => {
+app.get("/api/products/:id", async (req, res) => {
   const productId = req.params.id;
   const key = `product:${productId}`;
 
