@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+
+  api-gateway:
+    image: nginx:1.27-alpine
+    container_name: api-gateway
+    depends_on:
+      user-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+      order-service:
+        condition: service_started
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  user-service:
+    build:
+      context: ./user_service
+    container_name: user-service
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "5001:5001"
+
+  product-service:
+    build:
+      context: ./product_service
+    container_name: product-service
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "5002:5002"
+
+  order-service:
+    build:
+      context: ./order_service
+    container_name: order-service
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - USER_SERVICE_URL=http://user-service:5001
+      - PRODUCT_SERVICE_URL=http://product-service:5002
+    depends_on:
+      user-service:
+        condition: service_started
+      product-service:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    ports:
+      - "5003:5003"
+
